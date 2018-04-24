@@ -1,36 +1,5 @@
 -- | A simple chart drawing module, using the Gloss drawing package.
-module Graphics.HsCharts.Charts (
-      Point2
-    , Point3
-    -- * Axes
-    , AxisScaleType(..)
-    , fixedScaleAxis
-    , autoScaleAxis
-    , autoScaleAxis'
-    -- * Chart components
-    , plotChartBackground
-    , plotAxisX
-    , plotAxisY
-    , plotAxes
-    , plotAxisScales
-    , plotAxisScaleLabels
-    , plotGrid
-    -- * Chart types
-    , plotBarChart
-    , plotPointChart
-    , plotPointChart'
-    , plotLineChart
-    , plotAreaChart
-    , plotBubbleChart
-    , plotBubbleChart'
-    , boxPlot
-    , boxPlots
-    , plotPolarChart
-    , angularAxis
-    , radialAxis
-    , plotPolarGrid
-)
-where
+module Graphics.HsCharts.Charts where
 import Graphics.HsCharts.Helpers
 import Graphics.Gloss
 import Data.List
@@ -177,6 +146,19 @@ plotAxisScales xAxis yAxis (iX, iY) = pictures $ scalesX ++ scalesY
         ptX (i, x) = translate (x - 5) (yZero - 15) $ ptText i
         ptY (i, y) = translate (xZero - 20) (y - 3) $ ptText i
         ptText i   = scale textSize textSize $ text $ showFFloat' 1 i
+
+plotAxisScalesSZ :: Float -> Axis -> Axis -> (Float, Float) -> Picture
+plotAxisScalesSZ sz xAxis yAxis (iX, iY) = pictures $ scalesX ++ scalesY
+    where
+        textSize   = sz
+        xZero      = axisCrossingPt xAxis
+        yZero      = axisCrossingPt yAxis
+        scalesX    = map ptX $ gridPoints xAxis iX 12
+        scalesY    = map ptY $ gridPoints yAxis iY 12
+        ptX (i, x) = translate (x - 1) (yZero - 30) $ ptText i
+        ptY (i, y) = translate (xZero - 40) (y - 3) $ ptText i
+        ptText i   = scale textSize textSize $ text $ showFFloat' 1 i
+
 
 
 -- | Renders given labels along the x-axis.
